@@ -1,0 +1,55 @@
+// กำหนด datasource และ generator
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// โมเดลสำหรับตัวละคร
+model Character {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  element       String 
+  role          String 
+  faction       String 
+  rank          String 
+  attackType    String 
+  imageUrl      String      @default("") // URL ของรูปภาพจากแหล่งภายนอก
+  recommendedBuild RecommendedBuild[]
+}
+
+// โมเดลสำหรับ W-Engine (อาวุธ)
+model WEngine {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  rank          String 
+  mainStat      String 
+  effect        String 
+  imageUrl      String      @default("") 
+  recommendedBuild RecommendedBuild[]
+}
+
+// โมเดลสำหรับ Disk Drive (อุปกรณ์เพิ่มสเตตัส)
+model DiskDrive {
+  id            Int         @id @default(autoincrement())
+  name          String      @unique
+  twoPieceBonus String // โบนัส 2 ชิ้น
+  fourPieceBonus String // โบนัส 4 ชิ้น
+  imageUrl      String      @default("") 
+  recommendedBuild RecommendedBuild[]
+}
+
+// โมเดลสำหรับการ build ที่แนะนำ
+model RecommendedBuild {
+  id            Int         @id @default(autoincrement())
+  character     Character   @relation(fields: [characterId], references: [id])
+  characterId   Int
+  wEngine       WEngine     @relation(fields: [wEngineId], references: [id])
+  wEngineId     Int
+  diskDrive     DiskDrive   @relation(fields: [diskDriveId], references: [id])
+  diskDriveId   Int
+  description   String // คำอธิบายการ build
+}
