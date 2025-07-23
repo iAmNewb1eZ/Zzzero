@@ -3,7 +3,9 @@ npm i
 
 ของหลังบ้าน
 cd backend
-npx nodemon npm start
+docker-compose up -d <----- รัน db
+npx nodemon npm start <----- รันหลังบ้าน
+
 
 ของหน้าบ้าน
 cd frontend
